@@ -1,0 +1,11 @@
+[Unit]
+Description=Start opener.py and listen for garage open signals
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /home/pi/Documents/OpSes-Pi/opener.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
