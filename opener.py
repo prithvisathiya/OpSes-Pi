@@ -6,7 +6,10 @@ from passlib.hash import pbkdf2_sha256
 
 
 def verify_password(password):
-	passFile = open('hashedPass.txt', 'r')
+	file = 'hashedPass.txt'
+	if os.popen('whoami').read().strip() == 'pi':
+		file = '~/Documents/OpSes-Pi/hashedPass.txt'
+	passFile = open(file, 'r')
 	hashed = passFile.read().strip()
 	return pbkdf2_sha256.verify(password, hashed)
 
