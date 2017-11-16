@@ -3,6 +3,9 @@ import sys
 import socket
 import time
 from passlib.hash import pbkdf2_sha256
+import RPi.GPIO as GPIO
+
+
 
 
 def verify_password(password):
@@ -13,15 +16,67 @@ def verify_password(password):
 	hashed = passFile.read().strip()
 	return pbkdf2_sha256.verify(password, hashed)
 
-def Open_Sesame():
+def Open_Sesame(direction):
 	#Do motor control and shit here
 	print 'Opening'
 	sys.stdout.flush()
+	Seq = [[1,0,0,1],
+	       [1,0,0,0],
+	       [1,1,0,0],
+	       [0,1,0,0],
+	       [0,1,1,0],
+	       [0,0,1,0],
+	       [0,0,1,1],
+	       [0,0,0,1]]
+	        
+	StepCount = len(Seq)
+	StepDir = direction * 2
+	 
+	# Initialise variables
+	StepCounter = 0
+	count = 2048
+	while count > 0:
+		#print StepCounter,
+		#print Seq[StepCounter]
+
+		for pin in range(0,4):
+			xpin=StepPins[pin]# Get GPIO
+			if Seq[StepCounter][pin]!=0:
+				#print " Enable GPIO %i" %(xpin)
+				GPIO.output(xpin, True)
+			else:
+				GPIO.output(xpin, False)
+
+		StepCounter += StepDir
+
+		# If we reach the end of the sequence
+		# start again
+		if (StepCounter>=StepCount):
+			StepCounter = 0
+		if (StepCounter<0):
+			StepCounter = StepCount+StepDir
+
+		# Wait before moving on
+		time.sleep(.002)
 	return
 
 def main():
 	HOST = ''
 	PORT = 9393
+	GPIO.setmode(GPIO.BCM)
+	# Physical pins 11,15,16,18
+	# GPIO17,GPIO22,GPIO23,GPIO24
+	StepPins = [17,22,23,24]
+	direction = 1
+	for pin in StepPins:
+		print "Setup pins"
+		GPIO.setup(pin,GPIO.OUT)
+		GPIO.output(pin, False)
+	 
+	
+	
+	# Start main loop
+
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -50,7 +105,8 @@ def main():
 	    password = conn.recv(1024)
 	    if verify_password(password):
 	    	print 'Correct Password'
-	    	Open_Sesame()
+	    	direction *= -1
+	    	Open_Sesame(direction)
 	    else:
 	    	print 'Provided Password ({}) is incorrect'.format(password)
 
