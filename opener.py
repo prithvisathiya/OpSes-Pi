@@ -6,8 +6,6 @@ from passlib.hash import pbkdf2_sha256
 import RPi.GPIO as GPIO
 
 
-
-
 def verify_password(password):
 	file = 'hashedPass.txt'
 	if os.popen('whoami').read().strip() == 'pi':
@@ -17,7 +15,6 @@ def verify_password(password):
 	return pbkdf2_sha256.verify(password, hashed)
 
 def Open_Sesame(direction):
-	#Do motor control and shit here
 	print 'Opening'
 	sys.stdout.flush()
 	StepPins = [17,22,23,24]
@@ -37,9 +34,6 @@ def Open_Sesame(direction):
 	StepCounter = 0
 	count = 512
 	while count > 0:
-		#print StepCounter,
-		#print Seq[StepCounter]
-
 		for pin in range(0,4):
 			xpin=StepPins[pin]# Get GPIO
 			if Seq[StepCounter][pin]!=0:
@@ -50,14 +44,11 @@ def Open_Sesame(direction):
 
 		StepCounter += StepDir
 
-		# If we reach the end of the sequence
-		# start again
 		if (StepCounter>=StepCount):
 			StepCounter = 0
 		if (StepCounter<0):
 			StepCounter = StepCount+StepDir
 		count -= 1
-		# Wait before moving on
 		time.sleep(.002)
 	return
 
