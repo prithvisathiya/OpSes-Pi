@@ -20,6 +20,7 @@ def Open_Sesame(direction):
 	#Do motor control and shit here
 	print 'Opening'
 	sys.stdout.flush()
+	StepPins = [17,22,23,24]
 	Seq = [[1,0,0,1],
 	       [1,0,0,0],
 	       [1,1,0,0],
@@ -34,7 +35,7 @@ def Open_Sesame(direction):
 	 
 	# Initialise variables
 	StepCounter = 0
-	count = 2048
+	count = 512
 	while count > 0:
 		#print StepCounter,
 		#print Seq[StepCounter]
@@ -55,7 +56,7 @@ def Open_Sesame(direction):
 			StepCounter = 0
 		if (StepCounter<0):
 			StepCounter = StepCount+StepDir
-
+		count -= 1
 		# Wait before moving on
 		time.sleep(.002)
 	return
@@ -72,11 +73,6 @@ def main():
 		print "Setup pins"
 		GPIO.setup(pin,GPIO.OUT)
 		GPIO.output(pin, False)
-	 
-	
-	
-	# Start main loop
-
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
