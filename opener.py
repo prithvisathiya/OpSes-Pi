@@ -50,6 +50,8 @@ def Open_Sesame(direction):
 			StepCounter = StepCount+StepDir
 		count -= 1
 		time.sleep(.002)
+	for pin in StepPins:
+		GPIO.output(pin, False)
 	return
 
 def main():
