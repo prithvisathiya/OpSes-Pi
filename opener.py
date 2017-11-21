@@ -28,11 +28,11 @@ def Open_Sesame(direction):
 	       [0,0,0,1]]
 	        
 	StepCount = len(Seq)
-	StepDir = direction * 2
+	StepDir = direction * 1
 	 
 	# Initialise variables
 	StepCounter = 0
-	count = 512
+	count = 1024
 	while count > 0:
 		for pin in range(0,4):
 			xpin=StepPins[pin]# Get GPIO
