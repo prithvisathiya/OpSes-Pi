@@ -56,7 +56,7 @@ def Open_Sesame(direction):
 		 
 		# Initialise variables
 		StepCounter = 0
-		count = 1024
+		count = 512
 		while count > 0:
 			for pin in range(0,4):
 				xpin=StepPins[pin]# Get GPIO
@@ -129,6 +129,8 @@ def main():
 	    	print 'Correct Password'
 	    	direction *= -1
 	    	Open_Sesame(direction)
+		direction *= -1
+		Open_Sesame(direction)
 	    else:
 	    	print 'Provided Password ({}) is incorrect'.format(password)
 
