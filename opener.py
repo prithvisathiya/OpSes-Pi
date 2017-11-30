@@ -80,7 +80,7 @@ def Open_Sesame(direction):
 
 def main():
 	HOST = ''
-	PORT = 9393
+	PORT = int(os.environ['OPSESPORT'])
 	if OnPI:
 		GPIO.setmode(GPIO.BCM)
 		# Physical pins 11,15,16,18
